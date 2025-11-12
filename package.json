@@ -1,0 +1,34 @@
+{
+  "name": "crud-usuarios-microservicios",
+  "version": "1.0.0",
+  "description": "Sistema de microservicios para gestión de usuarios y departamentos",
+  "type": "commonjs",
+  "scripts": {
+    "install-all": "cd api-gateway && npm install && cd ../services/usuarios-service && npm install && cd ../departamentos-service && npm install && cd ../auth-service && npm install",
+    "start": "concurrently \"npm run start:gateway\" \"npm run start:auth\" \"npm run start:usuarios\" \"npm run start:departamentos\"",
+    "start:gateway": "cd api-gateway && npm start",
+    "start:auth": "cd services/auth-service && npm start",
+    "start:usuarios": "cd services/usuarios-service && npm start",
+    "start:departamentos": "cd services/departamentos-service && npm start",
+    "dev": "concurrently \"npm run dev:gateway\" \"npm run dev:auth\" \"npm run dev:usuarios\" \"npm run dev:departamentos\"",
+    "dev:gateway": "cd api-gateway && npm run dev",
+    "dev:auth": "cd services/auth-service && npm run dev",
+    "dev:usuarios": "cd services/usuarios-service && npm run dev",
+    "dev:departamentos": "cd services/departamentos-service && npm run dev"
+  },
+  "keywords": [
+    "microservices",
+    "api-gateway",
+    "crud",
+    "express",
+    "postgresql"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

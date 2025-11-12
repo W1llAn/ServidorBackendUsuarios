@@ -1,0 +1,232 @@
+### Ejemplo de peticiones HTTP para probar los endpoints
+
+### Health Checks
+GET http://localhost:3000/health
+###
+GET http://localhost:3001/health
+###
+GET http://localhost:3002/health
+
+### ============================================
+### ENDPOINTS DE USUARIOS
+### ============================================
+
+### GET - Listar todos los usuarios (con paginación)
+GET http://localhost:3000/api/usuarios?page=1&limit=10
+
+###
+
+### GET - Listar usuarios con búsqueda
+GET http://localhost:3000/api/usuarios?page=1&limit=10&search=juan
+
+###
+
+### GET - Buscar usuarios
+GET http://localhost:3000/api/usuarios/search?q=admin&page=1&limit=5
+
+###
+
+### GET - Obtener usuario por ID
+GET http://localhost:3000/api/usuarios/1
+
+###
+
+### POST - Crear nuevo usuario
+POST http://localhost:3000/api/usuarios
+Content-Type: application/json
+
+{
+  "username": "test.usuario",
+  "password": "123456",
+  "rol": "usuario",
+  "id_departamento": 1
+}
+
+###
+
+### POST - Crear usuario sin departamento
+POST http://localhost:3000/api/usuarios
+Content-Type: application/json
+
+{
+  "username": "usuario.sin.depto",
+  "password": "password123",
+  "rol": "usuario"
+}
+
+###
+
+### PUT - Actualizar usuario completo
+PUT http://localhost:3000/api/usuarios/1
+Content-Type: application/json
+
+{
+  "username": "usuario.actualizado",
+  "password": "nueva_contraseña",
+  "rol": "supervisor",
+  "id_departamento": 2
+}
+
+###
+
+### PUT - Actualizar solo algunos campos del usuario
+PUT http://localhost:3000/api/usuarios/2
+Content-Type: application/json
+
+{
+  "rol": "admin"
+}
+
+###
+
+### DELETE - Eliminar usuario
+DELETE http://localhost:3000/api/usuarios/5
+
+###
+
+### ============================================
+### ENDPOINTS DE DEPARTAMENTOS
+### ============================================
+
+### GET - Listar todos los departamentos (con paginación)
+GET http://localhost:3000/api/departamentos?page=1&limit=10
+
+###
+
+### GET - Listar departamentos con búsqueda
+GET http://localhost:3000/api/departamentos?page=1&limit=10&search=tecnología
+
+###
+
+### GET - Buscar departamentos
+GET http://localhost:3000/api/departamentos/search?q=ventas&page=1&limit=5
+
+###
+
+### GET - Obtener departamento por ID
+GET http://localhost:3000/api/departamentos/1
+
+###
+
+### POST - Crear nuevo departamento
+POST http://localhost:3000/api/departamentos
+Content-Type: application/json
+
+{
+  "nombre": "Operaciones",
+  "descripcion": "Departamento de operaciones y logística"
+}
+
+###
+
+### POST - Crear departamento solo con nombre
+POST http://localhost:3000/api/departamentos
+Content-Type: application/json
+
+{
+  "nombre": "Investigación y Desarrollo"
+}
+
+###
+
+### PUT - Actualizar departamento completo
+PUT http://localhost:3000/api/departamentos/1
+Content-Type: application/json
+
+{
+  "nombre": "Recursos Humanos Actualizado",
+  "descripcion": "Nueva descripción del departamento de RRHH"
+}
+
+###
+
+### PUT - Actualizar solo descripción del departamento
+PUT http://localhost:3000/api/departamentos/2
+Content-Type: application/json
+
+{
+  "descripcion": "Departamento de TI y desarrollo de software"
+}
+
+###
+
+### DELETE - Eliminar departamento
+DELETE http://localhost:3000/api/departamentos/6
+
+###
+
+### ============================================
+### CASOS DE PRUEBA PARA VALIDACIONES
+### ============================================
+
+### POST - Crear usuario con username muy corto (Error esperado)
+POST http://localhost:3000/api/usuarios
+Content-Type: application/json
+
+{
+  "username": "ab",
+  "password": "123456",
+  "rol": "usuario"
+}
+
+###
+
+### POST - Crear usuario con rol inválido (Error esperado)
+POST http://localhost:3000/api/usuarios
+Content-Type: application/json
+
+{
+  "username": "test.usuario2",
+  "password": "123456",
+  "rol": "gerente"
+}
+
+###
+
+### POST - Crear usuario sin password (Error esperado)
+POST http://localhost:3000/api/usuarios
+Content-Type: application/json
+
+{
+  "username": "test.usuario3",
+  "rol": "usuario"
+}
+
+###
+
+### POST - Crear departamento con nombre muy corto (Error esperado)
+POST http://localhost:3000/api/departamentos
+Content-Type: application/json
+
+{
+  "nombre": "IT"
+}
+
+###
+
+### POST - Crear usuario duplicado (Error esperado)
+POST http://localhost:3000/api/usuarios
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "123456",
+  "rol": "usuario"
+}
+
+###
+
+### POST - Crear departamento duplicado (Error esperado)
+POST http://localhost:3000/api/departamentos
+Content-Type: application/json
+
+{
+  "nombre": "Recursos Humanos"
+}
+
+###
+
+### DELETE - Eliminar departamento con usuarios asociados (Error esperado)
+DELETE http://localhost:3000/api/departamentos/1
+
+###

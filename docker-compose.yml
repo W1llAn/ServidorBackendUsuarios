@@ -1,0 +1,100 @@
+version: '3.8'
+
+services:
+  # Base de datos PostgreSQL
+  postgres:
+    image: postgres:15-alpine
+    container_name: microservicios_postgres
+    environment:
+      POSTGRES_DB: microservicios_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - microservicios_network
+
+  # Servicio de Usuarios
+  usuarios-service:
+    build: ./services/usuarios-service
+    container_name: usuarios_service
+    environment:
+      PORT: 3001
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: microservicios_db
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+    ports:
+      - "3001:3001"
+    depends_on:
+      - postgres
+    networks:
+      - microservicios_network
+
+  # Servicio de Departamentos
+  departamentos-service:
+    build: ./services/departamentos-service
+    container_name: departamentos_service
+    environment:
+      PORT: 3002
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: microservicios_db
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+    ports:
+      - "3002:3002"
+    depends_on:
+      - postgres
+    networks:
+      - microservicios_network
+
+  # Servicio de Autenticación
+  auth-service:
+    build: ./services/auth-service
+    container_name: auth_service
+    environment:
+      PORT: 3003
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: microservicios_db
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      JWT_SECRET: tu_clave_secreta_super_segura_cambiala_en_produccion
+      JWT_EXPIRES_IN: 24h
+      JWT_REFRESH_EXPIRES_IN: 7d
+    ports:
+      - "3003:3003"
+    depends_on:
+      - postgres
+    networks:
+      - microservicios_network
+
+  # API Gateway
+  api-gateway:
+    build: ./api-gateway
+    container_name: api_gateway
+    environment:
+      PORT: 3000
+      AUTH_SERVICE_URL: http://auth-service:3003
+      USERS_SERVICE_URL: http://usuarios-service:3001
+      DEPARTMENTS_SERVICE_URL: http://departamentos-service:3002
+    ports:
+      - "3000:3000"
+    depends_on:
+      - auth-service
+      - usuarios-service
+      - departamentos-service
+    networks:
+      - microservicios_network
+
+networks:
+  microservicios_network:
+    driver: bridge
+
+volumes:
+  postgres_data:

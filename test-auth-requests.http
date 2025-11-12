@@ -1,0 +1,158 @@
+### ============================================
+### ENDPOINTS DE AUTENTICACIÓN
+### ============================================
+
+### POST - Registrar nuevo usuario
+POST http://localhost:3000/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "nuevo.usuario",
+  "password": "123456",
+  "rol": "usuario",
+  "id_departamento": 1
+}
+
+###
+
+### POST - Login
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "123456"
+}
+
+###
+
+### POST - Refresh token
+POST http://localhost:3000/api/auth/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "tu_refresh_token_aqui"
+}
+
+###
+
+### POST - Logout
+POST http://localhost:3000/api/auth/logout
+Content-Type: application/json
+
+{
+  "refreshToken": "tu_refresh_token_aqui"
+}
+
+###
+
+### GET - Obtener perfil (requiere token)
+GET http://localhost:3000/api/auth/profile
+Authorization: Bearer tu_access_token_aqui
+
+###
+
+### PUT - Cambiar contraseña (requiere token)
+PUT http://localhost:3000/api/auth/change-password
+Authorization: Bearer tu_access_token_aqui
+Content-Type: application/json
+
+{
+  "currentPassword": "123456",
+  "newPassword": "nueva_contraseña_123"
+}
+
+###
+
+### POST - Verificar token
+POST http://localhost:3000/api/auth/verify
+Authorization: Bearer tu_access_token_aqui
+
+###
+
+### ============================================
+### EJEMPLOS CON DIFERENTES ROLES
+### ============================================
+
+### Login como Admin
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "123456"
+}
+
+###
+
+### Login como Usuario
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "juan.perez",
+  "password": "123456"
+}
+
+###
+
+### Login como Supervisor
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "maria.garcia",
+  "password": "123456"
+}
+
+###
+
+### ============================================
+### VALIDACIONES - CASOS DE ERROR
+### ============================================
+
+### POST - Registrar usuario con username muy corto (Error)
+POST http://localhost:3000/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "ab",
+  "password": "123456",
+  "rol": "usuario"
+}
+
+###
+
+### POST - Registrar usuario con rol inválido (Error)
+POST http://localhost:3000/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "test.usuario",
+  "password": "123456",
+  "rol": "gerente"
+}
+
+###
+
+### POST - Login con credenciales incorrectas (Error)
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "contraseña_incorrecta"
+}
+
+###
+
+### GET - Acceder a perfil sin token (Error)
+GET http://localhost:3000/api/auth/profile
+
+###
+
+### GET - Acceder a perfil con token inválido (Error)
+GET http://localhost:3000/api/auth/profile
+Authorization: Bearer token_invalido
+
+###
