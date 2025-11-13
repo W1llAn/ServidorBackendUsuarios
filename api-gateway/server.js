@@ -1,6 +1,6 @@
 require('dotenv').config();
 const express = require('express');
-const { createProxyMiddleware } = require('http-proxy-middleware');
+const proxy = require('express-http-proxy');
 const cors = require('cors');
 const morgan = require('morgan');
 
@@ -10,7 +10,6 @@ const PORT = process.env.PORT || 3000;
 // Middlewares
 app.use(cors());
 app.use(morgan('dev'));
-app.use(express.json());
 
 // Health check
 app.get('/health', (req, res) => {
@@ -18,47 +17,53 @@ app.get('/health', (req, res) => {
 });
 
 // Proxy para el servicio de autenticación
-app.use('/api/auth', createProxyMiddleware({
-  target: process.env.AUTH_SERVICE_URL,
-  changeOrigin: true,
-  pathRewrite: {
-    '^/api/auth': '/api/auth'
+app.use('/api/auth', proxy(process.env.AUTH_SERVICE_URL, {
+  proxyReqPathResolver: (req) => {
+    return '/api/auth' + req.url;
   },
-  onError: (err, req, res) => {
-    res.status(503).json({ 
-      error: 'Servicio de autenticación no disponible',
-      message: err.message 
-    });
+  timeout: 30000,
+  proxyErrorHandler: (err, res, next) => {
+    console.error('[AUTH PROXY] Error:', err.message);
+    if (!res.headersSent) {
+      res.status(503).json({ 
+        error: 'Servicio de autenticación no disponible',
+        message: err.message 
+      });
+    }
   }
 }));
 
 // Proxy para el servicio de usuarios
-app.use('/api/usuarios', createProxyMiddleware({
-  target: process.env.USERS_SERVICE_URL,
-  changeOrigin: true,
-  pathRewrite: {
-    '^/api/usuarios': '/api/usuarios'
+app.use('/api/usuarios', proxy(process.env.USERS_SERVICE_URL, {
+  proxyReqPathResolver: (req) => {
+    return '/api/usuarios' + req.url;
   },
-  onError: (err, req, res) => {
-    res.status(503).json({ 
-      error: 'Servicio de usuarios no disponible',
-      message: err.message 
-    });
+  timeout: 30000,
+  proxyErrorHandler: (err, res, next) => {
+    console.error('[USUARIOS PROXY] Error:', err.message);
+    if (!res.headersSent) {
+      res.status(503).json({ 
+        error: 'Servicio de usuarios no disponible',
+        message: err.message 
+      });
+    }
   }
 }));
 
 // Proxy para el servicio de departamentos
-app.use('/api/departamentos', createProxyMiddleware({
-  target: process.env.DEPARTMENTS_SERVICE_URL,
-  changeOrigin: true,
-  pathRewrite: {
-    '^/api/departamentos': '/api/departamentos'
+app.use('/api/departamentos', proxy(process.env.DEPARTMENTS_SERVICE_URL, {
+  proxyReqPathResolver: (req) => {
+    return '/api/departamentos' + req.url;
   },
-  onError: (err, req, res) => {
-    res.status(503).json({ 
-      error: 'Servicio de departamentos no disponible',
-      message: err.message 
-    });
+  timeout: 30000,
+  proxyErrorHandler: (err, res, next) => {
+    console.error('[DEPARTAMENTOS PROXY] Error:', err.message);
+    if (!res.headersSent) {
+      res.status(503).json({ 
+        error: 'Servicio de departamentos no disponible',
+        message: err.message 
+      });
+    }
   }
 }));
 

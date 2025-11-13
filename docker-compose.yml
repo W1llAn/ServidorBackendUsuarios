@@ -16,6 +16,11 @@ services:
       - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - microservicios_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   # Servicio de Usuarios
   usuarios-service:
@@ -31,7 +36,8 @@ services:
     ports:
       - "3001:3001"
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     networks:
       - microservicios_network
 
@@ -49,7 +55,8 @@ services:
     ports:
       - "3002:3002"
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     networks:
       - microservicios_network
 
@@ -70,7 +77,8 @@ services:
     ports:
       - "3003:3003"
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     networks:
       - microservicios_network
 
