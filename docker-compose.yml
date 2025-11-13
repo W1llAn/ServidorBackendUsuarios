@@ -52,6 +52,7 @@ services:
       DB_NAME: microservicios_db
       DB_USER: postgres
       DB_PASSWORD: postgres
+      JWT_SECRET: tu_clave_secreta_super_segura_cambiala_en_produccion
     ports:
       - "3002:3002"
     depends_on:
