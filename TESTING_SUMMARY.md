@@ -111,7 +111,7 @@ start coverage/index.html
 
 ---
 
-## 📊 Reporte Visual
+## Reporte Visual
 
 ### Estadísticas
 ```
@@ -133,7 +133,7 @@ Integración:    ████████████░░░░░░░░ 15
 
 ---
 
-## 📚 Documentación Completa
+## Documentación Completa
 
 - **README_TESTING.md** - Resumen completo de implementación
 - **TESTING.md** - Guía para desarrolladores
@@ -142,9 +142,9 @@ Integración:    ████████████░░░░░░░░ 15
 
 ---
 
-## 🌟 Conclusión
+##  Conclusión
 
-✅ **Sistema de pruebas completamente funcional**
+**Sistema de pruebas completamente funcional**
 
 Se implementó exitosamente:
 - ✅ 43 pruebas automatizadas
@@ -160,4 +160,3 @@ Se implementó exitosamente:
 
 **Fecha**: 3 de diciembre de 2025  
 **Ubicación**: `services/usuarios-service/`  
-**Desarrollado con**: GitHub Copilot

@@ -318,6 +318,4 @@ npm run test:watch
 - [Configuración Jest](./jest.config.js)
 
 ---
-
-**Generado por**: GitHub Copilot  
 **Última actualización**: 3 de diciembre de 2025
